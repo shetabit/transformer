@@ -12,6 +12,7 @@ transform array keys easly.
 ## List of contents
 
 - [Install](#install)
+- [How to use](#how-to-use)
 - [Change log](#change-log)
 - [Contributing](#contributing)
 - [Security](#security)
@@ -25,6 +26,42 @@ Via Composer
 ```bash
 $ composer require shetabit/transformer
 ```
+## How to use
+
+you can transform array keys by passing format into `get($format)` method
+
+```php
+$originalData = [
+    'f_name' => 'mahdi',
+    'l_name' => 'khanzadi'
+];
+
+$role = [
+    'f_name' => 'first_name',
+    'l_name' => 'last_name',
+];
+
+$transformedData = (new Transform($originalData))->get($role);
+```
+
+or you can use `from($currentFormat)` and `to($destinationFormat)`.
+
+```php
+$originalData = [
+    'f_name' => 'mahdi',
+    'l_name' => 'khanzadi'
+];
+
+$transform = new Transform;
+
+$data = $transform
+    ->setOriginalData($originalData)
+    ->from(['f_name', 'l_name'])
+    ->to(['first_name', 'last_name'])
+    ->get();
+```
+
+as you see, you can set original data dynamically using `setOriginalData` method.
 
 ## Change log
 
