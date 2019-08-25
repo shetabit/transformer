@@ -42,6 +42,15 @@ $role = [
 ];
 
 $transformedData = (new Transform($originalData))->get($role);
+
+/*
+data:
+[
+    'first_name' => 'mahdi',
+    'last_name' => 'khanzadi'
+]
+*/
+
 ```
 
 or you can use `from($currentFormat)` and `to($destinationFormat)`.
@@ -59,6 +68,13 @@ $data = $transform
     ->from(['f_name', 'l_name'])
     ->to(['first_name', 'last_name'])
     ->get();
+/*
+data:
+[
+    'first_name' => 'mahdi',
+    'last_name' => 'khanzadi'
+]
+*/ 
 ```
 
 as you see, you can set original data dynamically using `setOriginalData` method.
