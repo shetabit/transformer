@@ -2,6 +2,9 @@
 
 namespace Shetabit\Transformer\Classes;
 
+use Shetabit\Transformer\Classes\Transformer;
+use Shetabit\Transformer\Contracts\TransformerInterface;
+
 class Transform
 {
     /**
@@ -12,25 +15,18 @@ class Transform
     protected $originalData = [];
 
     /**
+     * Transformer
+     * 
+     * @var TransformerInterface
+     */
+    protected $transformer;
+
+    /**
      * Transformed data
      *
      * @var array
      */
     protected $transformedData = [];
-
-    /**
-     * Main's format
-     *
-     * @var array
-     */
-    protected $sourceFormat = [];
-
-    /**
-     * Destination's format
-     *
-     * @var array
-     */
-    protected $destinationFormat = [];
 
     /**
      * Class constructor
@@ -67,6 +63,18 @@ class Transform
     }
 
     /**
+     * Set data transformer
+     * 
+     * @return $this
+     */
+    public function setTransformer(TransformerInterface $transformer)
+    {
+        $this->transformer = $transformer;
+
+        return $this;
+    }
+
+    /**
      * Retrieve transformed data
      *
      * @return array
@@ -77,76 +85,20 @@ class Transform
     }
 
     /**
-     * Set current data's format
-     *
-     * @param array $format
-     *
-     * @return $this
-     */
-    public function from(array $format)
-    {
-        $this->sourceFormat = $format;
-
-        return $this;
-    }
-
-    /**
-     * Set destination data's format
-     *
-     * @param array $format
-     *
-     * @return $this
-     */
-    public function to(array $format)
-    {
-        $this->destinationFormat = $format;
-
-        return $this;
-    }
-
-    /**
      * Run transformer
      *
-     * @param array $format
+     * @param TransformerInterface $transformer
      *
      * @return array
      */
-    public function get(array $format = []) : array
+    public function get(TransformerInterface $transformer = null) : array
     {
-        if (!empty($format)) {
-            $this->from(array_keys($format))->to(array_values($format));
+        if (!empty($transformer)) {
+            $this->setTransformer($transformer);
         }
 
-        $this->transformedData = $this->getOriginalData();
-
-        $refactorFormat = array_combine($this->sourceFormat, $this->destinationFormat);
-
-        foreach ($refactorFormat as $from => $to) {
-            $this->transformedData = $this->replaceKey($this->getTransformedData(), $from, $to);
-        }
+        $this->transformedData = $this->transformer->transform($this->getOriginalData());
 
         return $this->getTransformedData();
-    }
-
-    /**
-     * Replace a key
-     *
-     * @param array $originalData
-     * @param string $from
-     * @param string $to
-     *
-     * @return array
-     */
-    public function replaceKey(array $originalData, string $from, string $to) : array
-    {
-        $index = array_search($from, array_keys($originalData));
-
-        if ($index !== false) {
-            $replacement = array($to => $originalData[$from]);
-
-            array_splice_assoc($originalData, $index, 1, $replacement);
-        }
-
-        return $originalData;
     }
 }
