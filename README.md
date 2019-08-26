@@ -83,6 +83,53 @@ data:
 
 as you see, you can set original data dynamically using `setOriginalData` method.
 
+## Transformers
+
+you can use `Shetabit\Transform\Classes\Transformer` to transform array keys.
+
+if you have complex array structures, you can create a custom transformer by implementing `TransformerInterface`
+
+```php
+// at the top
+use Shetabit\Transformer\Contracts\TransformerInterface;
+
+// ...
+
+class CustomTranformerName implements TransformerInterface
+{
+    /**
+     * Transform data
+     *
+     * @return array
+     */
+    public function transform(array $data) : array
+    {
+        return [
+            'user_name' => $data['u'],
+            'password' => $data['p']
+        ];
+    }
+}
+
+// use your custom transformer 
+$originalData = [
+    'u' => 'mahdikhanzadi',
+    'p' => '246810'
+];
+
+$transformer = new CustomTranformerName();
+
+$transformedData = (new Transform($originalData))->get($transformer);
+
+/*
+data:
+[
+    'username' => 'mahdikhanzadi',
+    'password' => '246810'
+]
+*/
+```
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
