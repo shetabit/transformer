@@ -22,8 +22,8 @@ class Transformer implements TransformerInterface
 
     /**
      * Transformer constructor
-     * 
-     * @return void
+     *
+     * @param array $format
      */
     public function __construct(array $format = [])
     {
@@ -63,8 +63,7 @@ class Transformer implements TransformerInterface
     /**
      * Set destination data's format
      *
-     * @param array $format
-     *
+     * @param $format
      * @return $this
      */
     public function to($format)
@@ -93,7 +92,6 @@ class Transformer implements TransformerInterface
      * @param array $originalData
      * @param string $from
      * @param string $to
-     *
      * @return array
      */
     protected function replaceKey(array $originalData, string $from, string $to) : array

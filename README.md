@@ -7,7 +7,7 @@
 
 # Laravel transformer
 
-transform array keys easly.
+transform array keys easily.
 
 ## List of contents
 
@@ -28,7 +28,7 @@ $ composer require shetabit/transformer
 ```
 ## How to use
 
-you can transform array keys by passing format into `get($format)` method
+you can transform array keys using `get($transformer)` method
 
 ```php
 $originalData = [
@@ -41,7 +41,9 @@ $role = [
     'l_name' => 'last_name',
 ];
 
-$transformedData = (new Transform($originalData))->get($role);
+$transformer = new Transformer($role);
+
+$transformedData = (new Transform($originalData))->get($transformer);
 
 /*
 data:
@@ -50,7 +52,6 @@ data:
     'last_name' => 'khanzadi'
 ]
 */
-
 ```
 
 or you can use `from($currentFormat)` and `to($destinationFormat)`.
@@ -61,20 +62,23 @@ $originalData = [
     'l_name' => 'khanzadi'
 ];
 
-$transform = new Transform;
+$transformer = new Transformer();
 
-$data = $transform
-    ->setOriginalData($originalData)
-    ->from(['f_name', 'l_name'])
-    ->to(['first_name', 'last_name'])
-    ->get();
+// convert f_name to first_name
+$transformer->from('f_name')->to('first_name');
+
+// convert l_name to last_name
+$transformer->from('l_name')->to('last_name');
+
+$transformedData = (new Transform($originalData))->use($transformer)->get();
+
 /*
 data:
 [
     'first_name' => 'mahdi',
     'last_name' => 'khanzadi'
 ]
-*/ 
+*/
 ```
 
 as you see, you can set original data dynamically using `setOriginalData` method.

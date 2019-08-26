@@ -2,8 +2,8 @@
 
 namespace Shetabit\Transformer\Classes;
 
-use Shetabit\Transformer\Classes\Transformer;
 use Shetabit\Transformer\Contracts\TransformerInterface;
+use Shetabit\Transformer\Exceptions\TransformerNotValidException;
 
 class Transform
 {
@@ -29,7 +29,7 @@ class Transform
     protected $transformedData = [];
 
     /**
-     * Class constructor
+     * Transform constructor.
      *
      * @param array $originalData
      */
@@ -42,7 +42,6 @@ class Transform
      * Set original data
      *
      * @param array $originalData
-     *
      * @return $this
      */
     public function setOriginalData(array $originalData)
@@ -65,9 +64,10 @@ class Transform
     /**
      * Set data transformer
      * 
+     * @param TransformerInterface $transformer
      * @return $this
      */
-    public function setTransformer(TransformerInterface $transformer)
+    public function use(TransformerInterface $transformer)
     {
         $this->transformer = $transformer;
 
@@ -87,14 +87,18 @@ class Transform
     /**
      * Run transformer
      *
-     * @param TransformerInterface $transformer
-     *
+     * @param TransformerInterface|null $transformer
      * @return array
+     * @throws TransformerNotValidException
      */
     public function get(TransformerInterface $transformer = null) : array
     {
         if (!empty($transformer)) {
             $this->setTransformer($transformer);
+        }
+
+        if (empty($this->transformer)) {
+            throw new TransformerNotValidException('Transformer not found');
         }
 
         $this->transformedData = $this->transformer->transform($this->getOriginalData());
