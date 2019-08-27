@@ -85,6 +85,19 @@ class Transform
     }
 
     /**
+     * Set transformer
+     *
+     * @param TransformerInterface $transformer
+     * @return $this
+     */
+    public function setTransformer(TransformerInterface $transformer)
+    {
+        $this->transformer = $transformer;
+
+        return $this;
+    }
+
+    /**
      * Run transformer
      *
      * @param TransformerInterface|null $transformer
