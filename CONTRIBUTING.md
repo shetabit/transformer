@@ -8,7 +8,13 @@ We accept contributions via Pull Requests on [Github](https://github.com/shetabi
 
 - **[PSR-2 Coding Standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)** - Check the code style with ``$ composer check-style`` and fix it with ``$ composer fix-style``.
 
-- **Add tests!** - Your patch won't be accepted if it doesn't have tests.
+- **Add tests!** - Your patch won't be accepted if it doesn't have tests. ``$ composer test`` runs the suite, ``$ make test`` runs it inside a container when there is no PHP on your machine.
+
+- **Keep the static analysis green** - Run ``$ composer analyse``. PHPStan has to report no errors at all.
+
+- **Keep the coverage up** - The code coverage of the test suite has to stay above 95%, which the CI pipeline checks. ``$ composer test-coverage`` reports it locally.
+
+- **Say what happens to a key that collides** - Renaming is applied to every key at once, and which key wins a name two of them want is part of the behaviour. A change to it belongs in `tests/Feature/KeyCollisionTest.php`.
 
 - **Document any change in behaviour** - Make sure the `README.md` and any other relevant documentation are kept up-to-date.
 

@@ -5,10 +5,9 @@ namespace Shetabit\Transformer\Contracts;
 interface TransformerInterface
 {
     /**
-     * Transform data
-     * 
-     * @param array $data
-     * @return array
+     * @param array<array-key, mixed> $data
+     *
+     * @return array<array-key, mixed>
      */
     public function transform(array $data) : array;
 }
