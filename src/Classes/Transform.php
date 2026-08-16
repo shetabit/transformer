@@ -7,31 +7,16 @@ use Shetabit\Transformer\Exceptions\TransformerNotValidException;
 
 class Transform
 {
-    /**
-     * Main data
-     *
-     * @var array
-     */
-    protected $originalData = [];
+    /** @var array<array-key, mixed> */
+    protected array $originalData = [];
+
+    protected TransformerInterface|null $transformer = null;
+
+    /** @var array<array-key, mixed> */
+    protected array $transformedData = [];
 
     /**
-     * Transformer
-     * 
-     * @var TransformerInterface
-     */
-    protected $transformer;
-
-    /**
-     * Transformed data
-     *
-     * @var array
-     */
-    protected $transformedData = [];
-
-    /**
-     * Transform constructor.
-     *
-     * @param array $originalData
+     * @param array<array-key, mixed> $originalData
      */
     public function __construct(array $originalData = [])
     {
@@ -39,12 +24,9 @@ class Transform
     }
 
     /**
-     * Set original data
-     *
-     * @param array $originalData
-     * @return $this
+     * @param array<array-key, mixed> $originalData
      */
-    public function setOriginalData(array $originalData)
+    public function setOriginalData(array $originalData) : static
     {
         $this->originalData = $originalData;
 
@@ -52,32 +34,32 @@ class Transform
     }
 
     /**
-     * Retrieve original data
-     *
-     * @return array
+     * @return array<array-key, mixed>
      */
     public function getOriginalData() : array
     {
         return $this->originalData;
     }
 
-    /**
-     * Set data transformer
-     * 
-     * @param TransformerInterface $transformer
-     * @return $this
-     */
-    public function use(TransformerInterface $transformer)
+    public function use(TransformerInterface $transformer) : static
+    {
+        return $this->setTransformer($transformer);
+    }
+
+    public function setTransformer(TransformerInterface $transformer) : static
     {
         $this->transformer = $transformer;
 
         return $this;
     }
 
+    public function getTransformer() : TransformerInterface|null
+    {
+        return $this->transformer;
+    }
+
     /**
-     * Retrieve transformed data
-     *
-     * @return array
+     * @return array<array-key, mixed>
      */
     public function getTransformedData() : array
     {
@@ -85,32 +67,17 @@ class Transform
     }
 
     /**
-     * Set transformer
+     * @return array<array-key, mixed>
      *
-     * @param TransformerInterface $transformer
-     * @return $this
-     */
-    public function setTransformer(TransformerInterface $transformer)
-    {
-        $this->transformer = $transformer;
-
-        return $this;
-    }
-
-    /**
-     * Run transformer
-     *
-     * @param TransformerInterface|null $transformer
-     * @return array
      * @throws TransformerNotValidException
      */
-    public function get(TransformerInterface $transformer = null) : array
+    public function get(TransformerInterface|null $transformer = null) : array
     {
-        if (!empty($transformer)) {
+        if ($transformer instanceof TransformerInterface) {
             $this->setTransformer($transformer);
         }
 
-        if (empty($this->transformer)) {
+        if (! $this->transformer instanceof TransformerInterface) {
             throw new TransformerNotValidException('Transformer not found');
         }
 

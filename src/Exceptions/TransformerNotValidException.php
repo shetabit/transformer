@@ -2,6 +2,6 @@
 
 namespace Shetabit\Transformer\Exceptions;
 
-class TransformerNotValidException extends  \Exception {
-    //
+class TransformerNotValidException extends TransformerException
+{
 }
